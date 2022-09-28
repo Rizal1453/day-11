@@ -48,6 +48,13 @@ func main() {
 	fmt.Println("server running port 7000")
 	http.ListenAndServe("localhost:7000",route)
 }
+type SessionData struct{
+	IsLogin bool
+	UserName string
+	FlashData string
+	
+}
+var Data = SessionData{}
 
 func helloWorld(w http.ResponseWriter, r *http.Request){
 	w.Write([]byte("Hello World"))
@@ -80,7 +87,7 @@ func home(w http.ResponseWriter, r *http.Request){
 			flashes = append(flashes, f1.(string))
 		}
 	}
-	Data.FlashData = strings.Join(flashes, "")
+	Data.FlashData = strings.Join(flashes, " ")
 
 	data,err :=connection.Conn.Query(context.Background(),"SELECT id,name,description,duration FROM tb_projects")
 	var result[]Project
@@ -122,12 +129,7 @@ func project(w http.ResponseWriter, r *http.Request){
 	tmpl.Execute(w,nil)
 }
 // var dataProject=[] Project{}
-type SessionData struct{
-	IsLogin bool
-	UserName string
-	FlashData string
-}
-var Data = SessionData{}
+
 
 
 type Project struct{
@@ -408,8 +410,9 @@ func login(w http.ResponseWriter, r *http.Request){
 	session.Values["IsLogin"] = true
 	session.Options.MaxAge = 10800 // 3 JAM
 
-	session.AddFlash("succesfull login", "message")
-	session.Save(r, w)
+	session.AddFlash("succesfull","message")
+	session.Save(r,w)
+	
 
 	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }

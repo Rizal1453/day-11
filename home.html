@@ -23,7 +23,7 @@
         </li>
         {{if .DataSession.IsLogin}}
         <li class="nav-item">
-          <a class="nav-link" href="/form-project">Add Project</a>
+          <a class="nav-link" href="/project">Add Project</a>
         </li>
         {{end}}
       </ul >
@@ -43,9 +43,9 @@
   </div>
 </nav>
 <!-- isi content -->
-{{if .FlashData}}
+{{if .DataSession.FlashData}} 
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>{{.FlashData}}</strong>
+    <strong>{{.DataSession.FlashData}}</strong>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{end}}
