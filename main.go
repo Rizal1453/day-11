@@ -41,6 +41,8 @@ func main() {
 	// // login
 	route.HandleFunc("/form-login",formLogin).Methods("GET")
 	route.HandleFunc("/submit-login",login).Methods("POST")
+
+	route.HandleFunc("/logout",logout).Methods("GET")
 	
 
 	fmt.Println("server running port 7000")
@@ -74,7 +76,7 @@ func home(w http.ResponseWriter, r *http.Request){
 	if len(fm) > 0 {
 		session.Save(r, w)
 		for _, f1 := range fm {
-			// meamasukan flash message
+			
 			flashes = append(flashes, f1.(string))
 		}
 	}
@@ -385,8 +387,7 @@ func login(w http.ResponseWriter, r *http.Request){
 	if err != nil {
 		fmt.Println("Email belum terdaftar")
 		http.Redirect(w, r, "/form-login", http.StatusMovedPermanently)
-		// w.WriteHeader(http.StatusBadRequest)
-		// w.Write([]byte("message : Email belum terdaftar " + err.Error()))
+	
 		return
 	}
 
@@ -402,7 +403,6 @@ func login(w http.ResponseWriter, r *http.Request){
 	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
 	session, _ := store.Get(r, "SESSION_KEY")
 
-	// berfungsi untuk menyimpan data kedalam session browser
 	session.Values["Name"] = user.Name
 	session.Values["Email"] = user.Email
 	session.Values["IsLogin"] = true
@@ -412,4 +412,14 @@ func login(w http.ResponseWriter, r *http.Request){
 	session.Save(r, w)
 
 	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+}
+
+func logout (w http.ResponseWriter, r *http.Request){
+	fmt.Println("logout")
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session,_ := store.Get(r,"SESSION_KEY")
+	session.Options.MaxAge= -1
+	session.Save(r,w)
+
+	http.Redirect(w,r,"/form-login",http.StatusSeeOther)
 }

@@ -21,16 +21,18 @@
         <li class="nav-item mx-4">
           <a class="nav-link active fw-bold" aria-current="page" href="/home">Home</a>
         </li>
+        {{if .DataSession.IsLogin}}
         <li class="nav-item">
           <a class="nav-link" href="/form-project">Add Project</a>
         </li>
+        {{end}}
       </ul >
       {{if .DataSession.IsLogin}}
-      <a href="">Hallo,{{.DataSession.UserName}}</a>
-      <a href="">logout</a>
+      <a href="#" class="me-5 text-decoration-none  text-dark">Hallo,{{.DataSession.UserName}}</a>
+      <a href="/logout" class="btn btn-dark text-white me-2 text-decoration-none fw-bold">logout</a>
       {{else}}
-      <a class="nav-link text-decoration-none me-3" href="">Register</a>
-      <a class="nav-link text-decoration-none me-3" href="">Login</a>
+      <a class="nav-link text-decoration-none me-3" href="/form-register">Register</a>
+      <a class="nav-link text-decoration-none me-3" href="/form-login">Login</a>
       {{end}}
       <a href="/contact">
         <button class="btn btn-dark text-white" type="submit">
@@ -41,9 +43,12 @@
   </div>
 </nav>
 <!-- isi content -->
-{{if .FlashData}} -->
-      <h2>{{.FlashData}}</h2>
-    {{end}}
+{{if .FlashData}}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>{{.FlashData}}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{end}}
     <div class="">
         <div class="content container d-flex justify-content-center align-item-center bg-danger shadow p-3 mb-5 bg-body rounded mt-5 ">
             <div class="p-5">
